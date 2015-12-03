@@ -38,6 +38,31 @@
 
             // return the mean in the list
             d3.mean([1,2,3], function(el) { return el; });
+
+            // parse cities.csv and return the min, max and mean of the population
+            d3.csv('data/cities.csv', function(data) {  
+                console.log(d3.min(data, function(el) { return +el.population}));  
+                console.log(d3.max(data, function(el) { return +el.population })); 
+                console.log( d3.mean(data, function(el) { return +el.population }))
+                
+                
+                // extend returns min and max in a two-piece array
+                console.log( d3.extent(data, function (el) {return +el.population}) );
+            });
+
+            // parse cities.csv
+            d3.csv('data/cities.csv', function(error, data) {
+                dataViz(data);
+            });
+
+            function dataViz(incomingData) {
+                d3.select('body').selectAll('div.cities') // this is empty as there are no divs with cities class
+                    .data(incomingData) // bind the data to the dom elements
+                    .enter() // define what to do when there aren't enough dom elements ( not enough or none at all )
+                        .append('div') // create a div
+                        .attr('class', 'cities') // give it a class of cities
+                        .html(function(d,i) {return d.label; }); // inject the label
+            }
         </script>
     </body>
 </html>
